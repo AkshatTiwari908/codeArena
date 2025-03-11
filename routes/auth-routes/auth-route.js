@@ -1,5 +1,5 @@
 import express from 'express'
-import {signup,verifyEmail,login,logout,forgetPassword,resetPassword} from '../controllers/disciple-auth-controller'
+import {signup,verifyEmail,login,logout,forgetPassword,resetPassword} from '../../controllers/auth-controller/auth-controller.js'
 const router = express.Router()
 
 router.post('/signup',signup)
