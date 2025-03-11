@@ -61,7 +61,7 @@ export const verifyEmail = async (req, res) => {
       })
     }
 
-    user.isEmailVerified = true
+    user.isVerified = true
     user.verificationToken = undefined
     user.verificationTokenExpiresAt = undefined
 
@@ -87,12 +87,12 @@ export const login = async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid Credentials" })
     }
 
-    const isPasswordValid = await bcryptjs.compare(password, user.password)
+    const isPasswordValid = bcryptjs.compare(password, user.password)
     if (!isPasswordValid) {
       return res.status(400).json({ success: false, message: "Invalid Password" })
     }
 
-    if (!user.isEmailVerified) {
+    if (!user.isVerified) {
       return res.status(400).json({ success: false, message: "First verify your email" })
     }
 
