@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-export const User= new mongoose.Schema(
+const userSchema= new mongoose.Schema(
     {
         username: {type:String,Unique:true},
         name:String,
@@ -8,3 +8,4 @@ export const User= new mongoose.Schema(
         constests:[new mongoose.Types.ObjectId()]
     }
 )
+export default mongoose.model('User',userSchema)
