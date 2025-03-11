@@ -13,3 +13,4 @@ router.put('/reset-password/:token',resetPassword)
 router.post('/verify-phone',()=>{
 
 })
+export default router

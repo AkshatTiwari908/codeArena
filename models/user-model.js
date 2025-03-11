@@ -5,7 +5,7 @@ const userSchema= new mongoose.Schema(
         name:String,
         email:String,
         password:String,
-        constests:[new mongoose.Types.ObjectId()]
+        contests: [{ type: mongoose.Schema.Types.ObjectId, ref: "Contest" }] 
     }
 )
 export default mongoose.model('User',userSchema)

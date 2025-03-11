@@ -1,15 +1,15 @@
-import User from "../../models/user-model"
+import User from "../../models/user-model.js"
 import bcryptjs from "bcryptjs"
 import crypto from "crypto"
-import generateTokenAndSetCookies from "../utils/generateTokenAndSetCookies"
+import generateTokenAndSetCookies from "../../utils/generateTokenAndSetCookies.js"
 import {
   sendVerificationEmail,
   sendWelcomeEmail,
-  sendRestPasswordEmail,
+  sendResetPasswordEmail,
   sendResetSuccessEmail,
-} from "../mailtrap/email";
+} from "../../mailtrap/email.js";
 
-const signup = async (req, res) => {
+export const signup = async (req, res) => {
   const { email, password, name, phone } = req.body
   try {
     if (!email || !password || !name || !phone) {
@@ -46,7 +46,7 @@ const signup = async (req, res) => {
   }
 }
 
-const verifyEmail = async (req, res) => {
+export const verifyEmail = async (req, res) => {
   const { code } = req.body
   try {
     const user = await User.findOne({
@@ -78,7 +78,7 @@ const verifyEmail = async (req, res) => {
   }
 }
 
-const login = async (req, res) => {
+export const login = async (req, res) => {
   const { email, password } = req.body
   try {
     const user = await User.findOne({ email })
@@ -112,12 +112,12 @@ const login = async (req, res) => {
   }
 }
 
-const logout = (req, res) => {
+export const logout = (req, res) => {
   res.clearCookie("token")
   res.status(200).json({ success: true, message: "Logged out successfully" })
 }
 
-const forgetPassword = async (req, res) => {
+export const forgetPassword = async (req, res) => {
   const { email } = req.body
 
   try {
@@ -134,7 +134,7 @@ const forgetPassword = async (req, res) => {
     user.resetPasswordExpiresAt = resetTokenExpiresAt
     await user.save()
 
-    await sendRestPasswordEmail(user.email, `${process.env.CLIENT_URL}/reset-password/${resetToken}`)
+    await sendResetPasswordEmail(user.email, `${process.env.CLIENT_URL}/reset-password/${resetToken}`)
 
     res.status(200).json({
       success: true,
@@ -146,7 +146,7 @@ const forgetPassword = async (req, res) => {
   }
 }
 
-const resetPassword = async (req, res) => {
+export const resetPassword = async (req, res) => {
   const { token } = req.params
   const { password } = req.body
 
@@ -177,12 +177,4 @@ const resetPassword = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
-
-export default {
-  signup,
-  verifyEmail,
-  login,
-  logout,
-  forgetPassword,
-  resetPassword,
-}
+ 
