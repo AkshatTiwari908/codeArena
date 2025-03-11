@@ -1,5 +1,4 @@
 import mongoose  from "mongoose";
-
 export const Contest= mongoose.Schema({
     title: String,
     description: String,
