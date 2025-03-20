@@ -1,8 +1,10 @@
 import express from "express"
-import { createContest,updateContest } from "../../controllers/admin-controller.js/contest-controller"
+import { createContest,updateContest,deleteContest,upcommingContest } from "../../controllers/admin-controller/contest-controller.js"
+
 const router = express.Router()
 router.post('/create-contest',createContest)
 router.put('/update-contest',updateContest)
-router.get('/all-contest')
-//Deleting Contest
-//Get All contest sorted by startTime
+router.delete('/delete-contest',deleteContest)
+router.get('/upcomming-contest',upcommingContest)
+
+export default router

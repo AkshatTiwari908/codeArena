@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-export const Problem= mongoose.Schema({
+const problemSchema = mongoose.Schema({
     title:String,
     statement:String,
     inputFormat:String,
@@ -11,3 +11,4 @@ export const Problem= mongoose.Schema({
         output:String
     }]
 })
+export const Problem= mongoose.model("Problem",problemSchema)

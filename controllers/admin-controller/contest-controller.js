@@ -21,7 +21,7 @@ import { Contest } from "../../models/contest-model"
 
 export const updateContest=async(req,res)=>{
 try{  const {contestId,title,description,startTime,endTime}= req.body
-  const contest = await Contest.findByIdAnd(contestId)
+  const contest = await Contest.findByIdAndUpdate(contestId)
   contest.updateOne({
     title:title,
     description:description,
@@ -32,7 +32,27 @@ try{  const {contestId,title,description,startTime,endTime}= req.body
    
 }
 }
+
 export const deleteContest=async(req,res)=>{
+ try{
  const contestId = req.body
- await Contest.findByIdAndDelete(contestId)
+ const contestDeleted = await Contest.findByIdAndDelete(contestId)
+ if(!contestDeleted){
+  return res.status(404).json({message:"Constest not found"})
+ }
+ return res.status(200).json({message:"Contest deleted successfully"})
+}catch(error){
+  res.status(500).json({ error: "Error deleting contest" })
+}
+}
+
+export const upcommingContest = async(req,res)=>{
+      try {
+        const currentTime = new Date()
+        const contests= await Contest.find({startTime:{$gt:currentTime}}).sort({startTime:-1})
+        return res.status(200).json(contests)
+      } catch (error) {
+        console.log(error)
+        return res.status(500).json({ error: "Error fetching contests" });
+      }
 }
