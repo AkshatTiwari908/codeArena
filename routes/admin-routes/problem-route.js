@@ -3,7 +3,7 @@ import {createProblemForContest,updateProblem,deleteProblem,getAllProblems}from 
 
 const router = express.Router()
 router.post('/create-problem',createProblemForContest)
-router.get('/all-problems',getAllProblems)
+router.get('/all-problem/:contestId',getAllProblems)
 router.put('/update-problem',updateProblem)
 router.delete('/delete-problem',deleteProblem)
 

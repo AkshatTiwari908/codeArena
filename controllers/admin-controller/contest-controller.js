@@ -1,4 +1,4 @@
-import { Contest } from "../../models/contest-model" 
+import Contest  from "../../models/contest-model.js" 
  
  export const createContest  = async(req,res)=>{
     try{
@@ -19,30 +19,49 @@ import { Contest } from "../../models/contest-model"
 
 }
 
-export const updateContest=async(req,res)=>{
-try{  const {contestId,title,description,startTime,endTime}= req.body
-  const contest = await Contest.findByIdAndUpdate(contestId)
-  contest.updateOne({
-    title:title,
-    description:description,
-    startTime:startTime,
-    endTime:endTime, 
-})
-}catch(error){
-   
+export const updateContest = async (req, res) => {
+  try {
+    const { contestId, title, description, startTime, endTime } = req.body
+
+    if (!contestId) {
+      return res.status(400).json({ message: "Contest ID is required" })
+    }
+
+    const contest = await Contest.findById(contestId)
+    if (!contest) {
+      return res.status(404).json({ message: "Contest not found" })
+    }
+
+    const updatedContest = await Contest.findByIdAndUpdate(
+      contestId,
+      {
+        title,
+        description,
+        startTime,
+        endTime,
+      },
+      { new: true } 
+    );
+
+    return res.status(200).json({ message: "Contest updated successfully", updatedContest });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Error in updating contest" });
+  }
 }
-}
+
 
 export const deleteContest=async(req,res)=>{
  try{
- const contestId = req.body
+ const {contestId} = req.body
  const contestDeleted = await Contest.findByIdAndDelete(contestId)
  if(!contestDeleted){
   return res.status(404).json({message:"Constest not found"})
  }
  return res.status(200).json({message:"Contest deleted successfully"})
 }catch(error){
-  res.status(500).json({ error: "Error deleting contest" })
+  console.log(error)
+  return res.status(500).json({ error: "Error deleting contest" })
 }
 }
 
@@ -53,6 +72,6 @@ export const upcommingContest = async(req,res)=>{
         return res.status(200).json(contests)
       } catch (error) {
         console.log(error)
-        return res.status(500).json({ error: "Error fetching contests" });
+        return res.status(500).json({ error: "Error fetching contests" })
       }
 }

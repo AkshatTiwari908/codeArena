@@ -11,4 +11,4 @@ const problemSchema = mongoose.Schema({
         output:String
     }]
 })
-export const Problem= mongoose.model("Problem",problemSchema)
+export default mongoose.model("Problem",problemSchema)

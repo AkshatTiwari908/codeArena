@@ -4,12 +4,12 @@ import mongoose  from "mongoose";
     description: String,
     startTime: Date,
     endTime: Date,
-    problems: [{type:new mongoose.Types.ObjectId(),ref:"Problem"}], 
+    problems: [{type: mongoose.Types.ObjectId,ref:"Problem"}], 
     leaderboard: [{
-      userId: new mongoose.Types.ObjectId(),
+      userId:  mongoose.Types.ObjectId,
       username: String,
       score: Number,
       submissions: Number
     }]
   })
-  export const Contest = mongoose.model("Contest", contestSchema)
+  export default mongoose.model("Contest", contestSchema)
