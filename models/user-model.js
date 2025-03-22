@@ -17,7 +17,7 @@ const userSchema= new mongoose.Schema(
 			type: Boolean,
 			default: false,
 		},
-        contests: [{ type: mongoose.Schema.Types.ObjectId, ref: "Contest" }] 
+        contests: [{ type: mongoose.Schema.Types.ObjectId, ref: "Contest" }]
     }
 )
 export default mongoose.model('User',userSchema)

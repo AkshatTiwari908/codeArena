@@ -6,6 +6,7 @@ const problemSchema = mongoose.Schema({
     outputFormat:String,
     sampleInput:String,
     sampleOutput:String,
+    difficulty:String,
     testCases:[{
         input:String,
         output:String
