@@ -75,3 +75,15 @@ export const upcommingContest = async(req,res)=>{
         return res.status(500).json({ error: "Error fetching contests" })
       }
 }
+
+export const heldContest = async (req, res) => {
+  try {
+      const currentTime = new Date();
+      const contests = await Contest.find({ endTime: { $lt: currentTime } }).sort({ endTime: -1 });
+
+      return res.status(200).json(contests);
+  } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Error fetching held contests" });
+  }
+};

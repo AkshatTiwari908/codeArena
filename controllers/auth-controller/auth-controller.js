@@ -7,7 +7,7 @@ import {
   sendWelcomeEmail,
   sendResetPasswordEmail,
   sendResetSuccessEmail,
-} from "../../mailtrap/email.js";
+} from "../../mailtrap/email.js"
 
 export const signup = async (req, res) => {
   const { email, password, name, phone } = req.body
@@ -163,18 +163,18 @@ export const resetPassword = async (req, res) => {
       })
     }
 
-    const hashedPassword = await bcryptjs.hash(password, 10);
+    const hashedPassword = await bcryptjs.hash(password, 10)
 
-    user.password = hashedPassword;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpiresAt = undefined;
-    await user.save();
+    user.password = hashedPassword
+    user.resetPasswordToken = undefined
+    user.resetPasswordExpiresAt = undefined
+    await user.save()
 
-    await sendResetSuccessEmail(user.email);
-    res.status(200).json({ success: true, message: "Password reset successful" });
+    await sendResetSuccessEmail(user.email)
+    res.status(200).json({ success: true, message: "Password reset successful" })
   } catch (error) {
-    console.log("Error in resetPassword ", error);
-    res.status(400).json({ success: false, message: error.message });
+    console.log("Error in resetPassword ", error)
+    res.status(400).json({ success: false, message: error.message })
   }
-};
+}
  
