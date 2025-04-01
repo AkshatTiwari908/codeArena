@@ -1,50 +1,27 @@
-import { exec } from "child_process"
-import fs from "fs"
-import { fileURLToPath } from "url"
-import path from "path"
+import fetch from "node-fetch"
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const executeCode = async (language, code, res) => {
+    const supportedLanguages = ["python", "java", "cpp"]
 
-// Convert Windows paths to Docker-compatible format
-const convertPathForDocker = (windowsPath) => {
-    return windowsPath.replace(/\\/g, "/").replace(/^([a-zA-Z]):/, (_, drive) => `/${drive.toLowerCase()}`)
-}
-
-const executeCode = (language, code, res) => {
-    const timestamp = Date.now()
-    let filename, dockerCommand
-    const dockerPath = convertPathForDocker(__dirname)
-
-    if (language === "python") {
-        filename = `temp_${timestamp}.py`
-        dockerCommand = `docker run --rm -v "${dockerPath}:/app" python:3.9 python /app/${filename}`
-    }else if (language === "java") {
-        filename = `Main.java`
-        dockerCommand = `docker run --rm -v "${dockerPath}:/app" openjdk:17 sh -c "javac /app/Main.java && java -cp /app Main && rm -f /app/Main.java /app/Main.class"`
-    }    
-     else if (language === "cpp") {
-        filename = `program_${timestamp}.cpp`
-        dockerCommand = `docker run --rm -v "${dockerPath}:/app" gcc:latest sh -c "g++ /app/${filename} -o /app/program_${timestamp} && /app/program_${timestamp}"`
-    } else {
+    if (!supportedLanguages.includes(language)) {
         return res.status(400).json({ error: "Unsupported language" })
     }
 
-
-    fs.writeFile(path.join(__dirname, filename), code, (err) => {
-        if (err) {
-            return res.status(500).json({ error: "Failed to save code file" })
-        }
-
-        exec(dockerCommand, (error, stdout, stderr) => {
-            fs.unlink(path.join(__dirname, filename), () => {})
-
-            if (error) {
-                return res.json({ error: stderr || error.message })
-            }
-            res.json({ output: stdout })
+    try {
+        const response = await fetch("http://13.201.193.73/execute", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ language, code })
         })
-    })
+
+        const data = await response.json()
+
+        return res.status(response.ok ? 200 : 500).json(data)
+    } catch (error) {
+        return res.status(500).json({ error: "Execution service unavailable", details: error.message })
+    }
 }
 
 export default executeCode
