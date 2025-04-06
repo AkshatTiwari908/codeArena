@@ -6,16 +6,17 @@ import contestProblemRoute from "./routes/admin-routes/problem-route.js"
 import adminAuthRouth from "./routes/auth-routes/admin-auth-route.js"
 import executeCodeRoute from "./routes/code-routes/code-execute-route.js"
 import cors from "cors"
+import cookieParser from "cookie-parser"
 
 const app = express()
 app.use(express.json())
+app.use(cookieParser())
 
 const corsOptions = {
     origin: [
       'https://codearena-1jev.onrender.com',
       'http://localhost:5173',
-      'http://170.70.0.87:5173',
-      'http://192.168.137.1:5173'                   
+                      
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],

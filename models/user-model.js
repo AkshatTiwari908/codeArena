@@ -17,7 +17,18 @@ const userSchema= new mongoose.Schema(
 			type: Boolean,
 			default: false,
 		},
-        contests: [{ type: mongoose.Schema.Types.ObjectId, ref: "Contest" }]
+		language:{type:String,enum:['Java','C++','Python']},
+		contestsParticipated : Number,
+		rank :Number,
+		contestNumber:Number,
+		problemsSolved:Number,
+        contests: [{ type: mongoose.Schema.Types.ObjectId,
+			ref: "Contest",
+			contestRank:Number,
+			score:Number,
+			timeTaken:String,
+			problemsSolved:Number
+		 }]
     }
 )
 export default mongoose.model('User',userSchema)

@@ -1,22 +1,27 @@
 import jwt from "jsonwebtoken"
 
-const userAuth = (req, res, next) => {
-    try {
-        const token = req.cookies.token 
-        console.log(token)
+const adminAuth = (req, res, next) => {
+  try {
+    const token = req.cookies.token
 
-        if (!token) {
-            return res.status(403).json({ message: "Token is required" }) 
-        }
-
-        const verified = jwt.verify(token, process.env.JWT_SECRET) 
-        
-        req.user = verified  
-        next() 
-    } catch (error) {
-        console.error(error) 
-        return res.status(401).json({ error: "Invalid token" })
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized: No token provided" })
     }
+    
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+    if (decoded.role !== "admin") {
+      return res.status(403).json({ message: "Forbidden: Admins only" })
+    }
+
+    
+    req.adminId = decoded.id
+    next()
+
+  } catch (error) {
+    console.error("Auth middleware error:", error)
+    res.status(401).json({ message: "Invalid or expired token" })
+  }
 }
 
-export default userAuth
+export default adminAuth

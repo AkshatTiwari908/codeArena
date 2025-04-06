@@ -2,15 +2,7 @@ import jwt from "jsonwebtoken"
 
 const userAuth = (req, res, next) => {
     try {
-        let token = req.cookies?.token 
-
-        if (!token && req.headers.authorization) {
-            
-            const authHeader = req.headers.authorization
-            if (authHeader.startsWith("Bearer ")) {
-                token = authHeader.split(" ")[1]
-            }
-        }
+        const token = req.cookies.jwToken 
 
         if (!token) {
             return res.status(403).json({ message: "Token is required" })
