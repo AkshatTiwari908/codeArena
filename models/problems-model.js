@@ -1,15 +1,18 @@
-import mongoose from "mongoose";
-const problemSchema = mongoose.Schema({
-    title:String,
-    statement:String,
-    inputFormat:String,
-    outputFormat:String,
-    sampleInput:String,
-    sampleOutput:String,
-    difficulty:String,
-    testCases:[{
-        input:String,
-        output:String
-    }]
+import mongoose from "mongoose"
+
+const submissionSchema = new mongoose.Schema({
+    contestId: { type: mongoose.Types.ObjectId, ref: "Contest" },
+    problemId: { type: mongoose.Types.ObjectId, ref: "Problem" },
+    userId: { type: mongoose.Types.ObjectId, ref: "User" },
+    language: { type: String, enum: ['cpp', 'java', 'python'], required: true },
+    code: { type: String, required: true },
+    status: { 
+        type: String, 
+        enum: ['Accepted', 'Runtime Error', 'Wrong Answer', 'Time Limit Exceeded', 'Compilation Error'], 
+        default: 'Wrong Answer'
+    },
+    score: { type: Number, default: 0 },
+    submittedAt: { type: Date, default: Date.now }
 })
-export default mongoose.model("Problem",problemSchema)
+
+export default mongoose.model("Submission", submissionSchema)
