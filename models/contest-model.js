@@ -1,8 +1,8 @@
 import mongoose  from "mongoose";
  const contestSchema= mongoose.Schema({
     title: String,
-    startTime: {type:Date,Required:true},
-    endTime: {type:Date,Required:true},
+    startTime: {type:Date,required:true},
+    endTime: {type:Date,required:true},
     totalProblems: Number,
     maxParticipants:Number,
     difficultyLevel:String,

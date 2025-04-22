@@ -10,6 +10,19 @@ export const createProblemForContest = async (req, res) => {
             outputFormat, sampleInput,
             sampleOutput, testCases } = req.body
 
+        if (!contestId || !title || !statement || !inputFormat || !outputFormat || !sampleInput || !sampleOutput || !testCases) {
+            return res.status(400).json({ error: "All fields are required" });
+        }
+
+        const contest = await Contest.findById(contestId);
+        if (!contest) {
+            return res.status(404).json({ error: "Contest not found" });
+        }
+
+        if (!Array.isArray(testCases) || !testCases.every(testCase => testCase.input && testCase.output)) {
+            return res.status(400).json({ error: "testCases must be an array of objects with 'input' and 'output' properties" });
+        }
+
         const newProblem = new Problem({
             title,
             statement,
@@ -72,17 +85,17 @@ export const deleteProblem = async (req, res) => {
 
 export const getAllProblems = async (req, res) => {
     try {
-        const {contestId} = req.params
+        const { contestId } = req.params
         const contest = await Contest.findById(contestId).populate("problems");
 
         if (!contest) {
             return res.status(404).json({ error: "Contest not found" });
         }
 
-       return res.status(200).json({ problems: contest.problems });
+        return res.status(200).json({ problems: contest.problems });
 
     } catch (error) {
         console.error(error);
-       return res.status(500).json({ error: "Error in getting problem" })
+        return res.status(500).json({ error: "Error in getting problem" })
     }
 }
