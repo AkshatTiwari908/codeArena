@@ -113,7 +113,7 @@ export const login = async (req, res) => {
 }
 
 export const logout = (req, res) => {
-  res.clearCookie("token")
+  res.clearCookie("jwToken")
   res.status(200).json({ success: true, message: "Logged out successfully" })
 }
 
